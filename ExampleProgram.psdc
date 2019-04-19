@@ -1,0 +1,12 @@
+x = 5
+IF x == 6 THEN
+  PRINT x
+ELSEIF x > 0 THEN
+  IF x != 0 THEN
+    PRINT x + 1
+  ELSEIF x == 5 THEN
+    PRINT x - 1
+  ENDIF
+ENDIF
+
+myString = "correct output: 6 \n 4"

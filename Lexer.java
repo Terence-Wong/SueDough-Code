@@ -154,62 +154,20 @@ public class Lexer{
             tokens.add(new Token(Type.OPERATOR, "="));
             i++;
             break;
+          case '>':
+            tokens.add(new Token(Type.OPERATOR, ">"));
+            i++;
+            break;
+          case '<':
+            tokens.add(new Token(Type.OPERATOR, "<"));
+            i++;
+            break;
           default:
             if(Character.isWhitespace(line.charAt(i))){
               i++;
-            }else if(line.charAt(i) =='"'){
-              // no way to have /" (escaped double quotes) inside a string atm
-              /*int j = i;
-              for(; j < line.length();){
-                if(Character.isLetter(line.charAt(j))){
-                  j++;
-                  t = Type.IDENTIFIER;
-                }else if(Character.isDigit(line.charAt(i))){
-                  // NOT A WHILTe SPACE, LETTER, OR SYMBOL TOKEN TEST CASE
-                  // GOES HERE WITHOUT INCREMENTING j
-                  // 
-                  // check if number literal, might be other edge cases
-                  j++;
-                  t = Type.KEYWORD;
-                }else{
-                  t = null;
-                  break;
-                }
-              }
-              String input = line.substring(i,j);
-              wordHandler(input); 
-              i = j+1;*/
             }else{
-              //'word' handling here has potential flaws
-              /* will only continue looking for next character if the current
-                character is a letter/digit. (breaks if unrecognized symbol) The 
-                type of the token is determined by the last character
-              */
-              Type t = null;
-              int j = i;
-              for(; j < line.length();){
-                if(Character.isLetter(line.charAt(j))){
-                  j++;
-                  t = Type.IDENTIFIER;
-                }else if(Character.isDigit(line.charAt(i))){
-                  // check if number literal, might be other edge cases
-                  j++;
-                  t = Type.LITERAL;
-                }else{
-                  //t = null;
-                  break;
-                }
-              }
-              String input = line.substring(i,j);
-              if(t == Type.IDENTIFIER){
-                wordHandler(input); 
-              }else if(t == Type.LITERAL){
-                tokens.add(new Token(t, input));
-              }else{// t == null, error
-
-              }
-              
-              i = j;
+              //breaks when there is a single unrecognized character
+              i = wordWrapper(i, line);
             }
             break;
         }
@@ -218,10 +176,62 @@ public class Lexer{
     }
     printTokens();
   }
+
+  public static int wordWrapper(int i, String line){
+    //'word' wrapping here has potential flaws
+    /* will only continue looking for next character if the current
+    character is a letter/digit/quote. (breaks if unrecognized symbol) The 
+    type of the token is determined by the last character
+
+    asdf"asd --> identifier (asdf"asd)
+    asdf"asd"hello  --> literal (asdf"asd")
+
+    */
+    Type t = null;
+    int j = i;
+    boolean quotes = false;
+    for(; j < line.length(); ){
+      if(Character.isDigit(line.charAt(j))){
+        //check if nmber is literal, might have to account for other edge cases
+        j++;
+        t = Type.LITERAL;
+      }else if(line.charAt(j) == '"'){
+        if(quotes){
+          j++;
+          t = Type.LITERAL;
+          break;
+        }else{
+          j++;
+          quotes = true;
+        }
+      }else if(Character.isWhitespace(line.charAt(j))){
+        if(quotes){
+          j++;
+        }else{
+          break;
+        }
+      }else{ //unrecognized character
+        //assume identifier (letter, symbol, etc)
+        j++;
+        t = Type.IDENTIFIER;
+      }
+    }
+    String input = line.substring(i,j);
+    if(t == Type.IDENTIFIER){
+      wordHandler(input); 
+    }else if(t == Type.LITERAL){
+      tokens.add(new Token(t, input));
+    }else{// t == null, error
+
+    }
+    return j;
+  }
+
   public static void printTokens(){
     for(Token t : tokens){
       System.out.println(t.toString());
       System.out.println("");
     }
   }
+
 }
