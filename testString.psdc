@@ -1,0 +1,7 @@
+IF condition THEN
+  sequence aa a
+ELSEIF
+  sequence 2
+ELSE
+  sequence 1234
+ENDIF
