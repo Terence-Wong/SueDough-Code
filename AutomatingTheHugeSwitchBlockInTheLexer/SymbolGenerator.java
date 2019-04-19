@@ -14,5 +14,11 @@ public class SymbolGenerator{
       //System.out.println("  i++;");
       System.out.println("  break;");
     }
+    for(int i = 0; i < Symbols.Separators.length; i++){
+      System.out.println("case \""+Symbols.Separators[i]+"\":");
+      System.out.println("  tokens.add(new Token(Type.SEPARATOR, \""+Symbols.Separators[i]+"\"));");
+      //System.out.println("  i++;");
+      System.out.println("  break;");
+    }
   }
 }

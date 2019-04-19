@@ -1,11 +1,24 @@
 
 public class Symbols{
   //for whole word symbols
+  public static String[] Separators = {
+    "(",
+    ")"
+  };
   public static String[] Operators = {
     "==",
     ">=",
     "<=",
-    "!="
+    "!=",
+    "-", 
+    "+", 
+    "*", 
+    "/",
+    "%", 
+    "^", 
+    "=",
+    ">",
+    "<",
   };
   public static String[] KeyWords = {
     "PRINT",

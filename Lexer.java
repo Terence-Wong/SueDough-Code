@@ -99,6 +99,39 @@ public class Lexer{
       case "!=":
         tokens.add(new Token(Type.OPERATOR, "!="));
         break;
+      case "-":
+        tokens.add(new Token(Type.OPERATOR, "-"));
+        break;
+      case "+":
+        tokens.add(new Token(Type.OPERATOR, "+"));
+        break;
+      case "*":
+        tokens.add(new Token(Type.OPERATOR, "*"));
+        break;
+      case "/":
+        tokens.add(new Token(Type.OPERATOR, "/"));
+        break;
+      case "%":
+        tokens.add(new Token(Type.OPERATOR, "%"));
+        break;
+      case "^":
+        tokens.add(new Token(Type.OPERATOR, "^"));
+        break;
+      case "=":
+        tokens.add(new Token(Type.OPERATOR, "="));
+        break;
+      case ">":
+        tokens.add(new Token(Type.OPERATOR, ">"));
+        break;
+      case "<":
+        tokens.add(new Token(Type.OPERATOR, "<"));
+        break;
+      case "(":
+        tokens.add(new Token(Type.SEPARATOR, "("));
+        break;
+      case ")":
+        tokens.add(new Token(Type.SEPARATOR, ")"));
+        break;
       default:
         tokens.add(new Token(Type.IDENTIFIER, in));
         break;
@@ -115,61 +148,11 @@ public class Lexer{
 
       //System.out.println(line);
 
-
       for(int i = 0; i < line.length();){
-        switch(line.charAt(i)){
-          case '(':
-            tokens.add(new Token(Type.SEPARATOR, "("));
-            i++;
-            break;
-          case ')':
-            tokens.add(new Token(Type.SEPARATOR, ")"));
-            i++;
-            break;
-          case '-':
-            tokens.add(new Token(Type.OPERATOR, "-"));
-            i++;
-            break;
-          case '+':
-            tokens.add(new Token(Type.OPERATOR, "+"));
-            i++;
-            break;
-          case '*':
-            tokens.add(new Token(Type.OPERATOR, "*"));
-            i++;
-            break;
-          case '/':
-            tokens.add(new Token(Type.OPERATOR, "/"));
-            i++;
-            break;
-          case '%':
-            tokens.add(new Token(Type.OPERATOR, "%"));
-            i++;
-            break;
-          case '^':
-            tokens.add(new Token(Type.OPERATOR, "^"));
-            i++;
-            break;
-          case '=':
-            tokens.add(new Token(Type.OPERATOR, "="));
-            i++;
-            break;
-          case '>':
-            tokens.add(new Token(Type.OPERATOR, ">"));
-            i++;
-            break;
-          case '<':
-            tokens.add(new Token(Type.OPERATOR, "<"));
-            i++;
-            break;
-          default:
-            if(Character.isWhitespace(line.charAt(i))){
-              i++;
-            }else{
-              //breaks when there is a single unrecognized character
-              i = wordWrapper(i, line);
-            }
-            break;
+        if(Character.isWhitespace(line.charAt(i))){
+          i++;
+        }else{
+          i = wordWrapper(i, line);
         }
       }
       line = br.readLine();
@@ -217,6 +200,7 @@ public class Lexer{
       }
     }
     String input = line.substring(i,j);
+    //System.out.println(input);
     if(t == Type.IDENTIFIER){
       wordHandler(input); 
     }else if(t == Type.LITERAL){
