@@ -12,21 +12,6 @@ public class Lexer{
     LITERAL,
     COMMENT;
   }
-  
-  public static class Token{
-    public final Type t;   // type of token 
-    public final String c; // content
-    /*
-    add line number and column for error messages
-    */
-    public Token(Type type, String content){
-      t = type;
-      c = content;
-    }
-    public String toString() {
-      return "TYPE: " + t.toString() + "\nCONTENT: " + c;
-    }
-  }
   public static void wordHandler(String in){
     //System.out.println(in);
     switch(in){
@@ -137,28 +122,6 @@ public class Lexer{
         break;
     }
   }
-  public static void main(String[]args) throws IOException{
-    //going to assume args has the file were going to need
-    String fileName = args[0];
-    BufferedReader br = new BufferedReader(new FileReader(fileName));
-    //System.out.println(br.readLine());
-
-    String line = br.readLine();
-    while(line != null){
-
-      //System.out.println(line);
-
-      for(int i = 0; i < line.length();){
-        if(Character.isWhitespace(line.charAt(i))){
-          i++;
-        }else{
-          i = wordWrapper(i, line);
-        }
-      }
-      line = br.readLine();
-    }
-    printTokens();
-  }
 
   public static int wordWrapper(int i, String line){
     //'word' wrapping here has potential flaws
@@ -209,6 +172,45 @@ public class Lexer{
 
     }
     return j;
+  }
+
+  public static void main(String[]args) throws IOException{
+    //going to assume args has the file were going to need
+    String fileName = args[0];
+    BufferedReader br = new BufferedReader(new FileReader(fileName));
+    //System.out.println(br.readLine());
+
+    String line = br.readLine();
+    while(line != null){
+
+      //System.out.println(line);
+
+      for(int i = 0; i < line.length();){
+        if(Character.isWhitespace(line.charAt(i))){
+          i++;
+        }else{
+          i = wordWrapper(i, line);
+        }
+      }
+      line = br.readLine();
+    }
+    printTokens();
+  }
+
+  public static List<Token> tokenize(String filename) throws IOException{
+    BufferedReader br = new BufferedReader(new FileReader(filename));
+    String line = br.readLine();
+    while(line != null){
+      for(int i = 0; i < line.length();){
+        if(Character.isWhitespace(line.charAt(i))){
+          i++;
+        }else{
+          i = wordWrapper(i, line);
+        }
+      }
+      line = br.readLine();
+    }
+    return tokens;
   }
 
   public static void printTokens(){
