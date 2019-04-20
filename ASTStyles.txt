@@ -1,0 +1,139 @@
+
+x = 5
+IF x == 6 THEN
+  PRINT x
+ELSEIF x > 0 
+  IF x != 0 THEN
+    PRINT x + 1
+  ELSEIF x == 5 
+    PRINT x - 1
+  ENDIF
+ENDIF
+
+myString = "correct output: 6 \n 4"
+
+*/
+/*
+
+Target AST
+
+{
+  Type: "Program",
+  Tasks:[
+    {
+      Type: "Assign",
+      Assign: {
+        Variable: {
+          Type: "Variable",
+          Value: "x"
+        },
+        Expression: {
+          Type: "Literal",
+          Value: 5
+        }
+      }
+    },
+    {
+      Type: "Conditional",
+      Loop: false,
+      Contingency: {
+        Type: "Compute",
+        Operator: "==",
+        Left:{
+          Type: "Variable",
+          Value: "x"
+        },
+        Right: {
+          Type: "Literal",
+          Value: 6
+        }
+      },
+      IfValid: {
+        Type: "Program",
+        Tasks:[
+          {
+            Type: "Call",
+            Function: "PRINT",
+            Arguments: [
+              {
+                Type: "Variable",
+                Value: "x"
+              }
+            ]
+          }
+        ]
+      },
+      else:
+
+    }
+  ]
+}
+
+
+###############################
+
+AST style
+
+Types: PROGRAM, ASSIGN, COMPUTE, CALL, LITERAL, VARIABLE, CONDITIONAL
+
+Program (void)
+{
+  Type: "Program",
+  Tasks:[
+    {list of things to do}
+  ]
+}
+
+Assign (void)
+{
+  Type: "Assign",
+  Variable: {see variable ast style},
+  Expression: {can be a literal expression, computation, or variable}
+}
+
+Compute (returns value)
+{
+  Type: "Compute",
+  Operator: "+,-,/,==,!=,etc"
+  Left: {some expression}           <--- make sure left/right can be 'operator'd'; (left: string, right: int) 
+  Right: {some expression}
+}
+
+Call (returns value)
+{
+  Type: "Call",
+  Function: "function name (Print)",
+  Arguments:[{expression},{expression}]
+}
+
+NumbericalLiteral (returns value)
+{
+  Type: "NumbericalLiteral",
+  Value: 10.0 <-- all floats for now for simplicty
+}
+StringLiteral
+{
+  Type: "StringLiteral",
+  Value: "String Literal"
+}
+BooleanLiteral
+{
+  Type: "BooleanLiteral",
+  Value: "String Literal"
+}
+
+Variable (returns value)
+{
+  Type: "Variable",
+  Value: "x"
+}
+
+Conditional (void)
+{
+  Type: "Conditional",
+  Loop: false,
+  CheckFirst: true,
+  Contingency: {boolean expression}
+  IfBlock: {ProgramNode}
+  Else: {ProgramNode, empty if no else/elseif}
+}
