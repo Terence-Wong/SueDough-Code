@@ -11,12 +11,25 @@ Key problems:
 - 
 */ 
 public class Parser{
+  static ArrayList<Node> program = new ArrayList<Node>();
+  static List<Token> tokens;
+  public static enum State{
+    REGULAR, 
+    ASSIGNMENT, 
+    EXPRESSION,
+    SEMI_EXPRESSION;
+  }
   public static void main(String[] args) throws IOException{
     String fn = "ExampleProgram.psdc";
-    List<Token> tokens = Lexer.tokenize(fn);
-    //System.out.println(tokens.get(0).toString());
-    Node test = new ProgramNode(new ArrayList<Node>());
-    System.out.println(test.toJSONString());
-    System.out.println(true);
+    tokens = Lexer.tokenize(fn);
+    
+    recurse(State.REGULAR);
+
+    Node programNode = new ProgramNode(program);
+
+  }
+
+  public static void recurse(State state){
+
   }
 }

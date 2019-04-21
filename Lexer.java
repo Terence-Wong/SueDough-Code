@@ -1,9 +1,51 @@
 import java.io.*;
 import java.util.List;
+
+
 import java.util.LinkedList;
+import java.util.HashMap;
 
 public class Lexer{
   static List<Token> tokens = new LinkedList<Token>();
+  static HashMap<String,Type> symbols = new HashMap<>(){{
+    put("(", Type.SEPARATOR);
+    put(")", Type.SEPARATOR);
+
+    put("==", Type.OPERATOR);
+    put(">=", Type.OPERATOR);
+    put("<=", Type.OPERATOR);
+    put("!=", Type.OPERATOR);
+    put("-", Type.OPERATOR); 
+    put("+", Type.OPERATOR); 
+    put("*", Type.OPERATOR); 
+    put("/", Type.OPERATOR);
+    put("%", Type.OPERATOR); 
+    put("^", Type.OPERATOR); 
+    put("=", Type.OPERATOR);
+    put(">", Type.OPERATOR);
+    put("<", Type.OPERATOR);
+
+    put("PRINT", Type.KEYWORD);
+    put("IF", Type.KEYWORD);
+    put("THEN", Type.KEYWORD);
+    put("ELSEIF", Type.KEYWORD);
+    put("ELSE", Type.KEYWORD);
+    put("ENDIF", Type.KEYWORD);
+    put("WHILE", Type.KEYWORD);
+    put("ENDWHILE", Type.KEYWORD);
+    put("REPEAT", Type.KEYWORD);
+    put("UNTIL", Type.KEYWORD);
+    put("CASE", Type.KEYWORD);
+    put("OF", Type.KEYWORD);
+    put("OTHERS", Type.KEYWORD);
+    put("ENDCASE", Type.KEYWORD);
+    put("FOR", Type.KEYWORD);
+    put("ENDFOR", Type.KEYWORD);
+    put("BEGIN", Type.KEYWORD);
+    put("END", Type.KEYWORD);
+    put("EXCEPTION", Type.KEYWORD);
+    put("WHEN", Type.KEYWORD);
+  }}; 
   public static enum Type{
     IDENTIFIER,
     KEYWORD,
@@ -14,112 +56,10 @@ public class Lexer{
   }
   public static void wordHandler(String in){
     //System.out.println(in);
-    switch(in){
-      case "PRINT":
-        tokens.add(new Token(Type.KEYWORD, "PRINT"));
-        break;
-      case "IF":
-        tokens.add(new Token(Type.KEYWORD, "IF"));
-        break;
-      case "THEN":
-        tokens.add(new Token(Type.KEYWORD, "THEN"));
-        break;
-      case "ELSE":
-        tokens.add(new Token(Type.KEYWORD, "ELSE"));
-        break;
-      case "ENDIF":
-        tokens.add(new Token(Type.KEYWORD, "ENDIF"));
-        break;
-      case "WHILE":
-        tokens.add(new Token(Type.KEYWORD, "WHILE"));
-        break;
-      case "ENDWHILE":
-        tokens.add(new Token(Type.KEYWORD, "ENDWHILE"));
-        break;
-      case "REPEAT":
-        tokens.add(new Token(Type.KEYWORD, "REPEAT"));
-        break;
-      case "UNTIL":
-        tokens.add(new Token(Type.KEYWORD, "UNTIL"));
-        break;
-      case "CASE":
-        tokens.add(new Token(Type.KEYWORD, "CASE"));
-        break;
-      case "OF":
-        tokens.add(new Token(Type.KEYWORD, "OF"));
-        break;
-      case "OTHERS":
-        tokens.add(new Token(Type.KEYWORD, "OTHERS"));
-        break;
-      case "ENDCASE":
-        tokens.add(new Token(Type.KEYWORD, "ENDCASE"));
-        break;
-      case "FOR":
-        tokens.add(new Token(Type.KEYWORD, "FOR"));
-        break;
-      case "ENDFOR":
-        tokens.add(new Token(Type.KEYWORD, "ENDFOR"));
-        break;
-      case "BEGIN":
-        tokens.add(new Token(Type.KEYWORD, "BEGIN"));
-        break;
-      case "END":
-        tokens.add(new Token(Type.KEYWORD, "END"));
-        break;
-      case "EXCEPTION":
-        tokens.add(new Token(Type.KEYWORD, "EXCEPTION"));
-        break;
-      case "WHEN":
-        tokens.add(new Token(Type.KEYWORD, "WHEN"));
-        break;
-      case "==":
-        tokens.add(new Token(Type.OPERATOR, "=="));
-        break;
-      case ">=":
-        tokens.add(new Token(Type.OPERATOR, ">="));
-        break;
-      case "<=":
-        tokens.add(new Token(Type.OPERATOR, "<="));
-        break;
-      case "!=":
-        tokens.add(new Token(Type.OPERATOR, "!="));
-        break;
-      case "-":
-        tokens.add(new Token(Type.OPERATOR, "-"));
-        break;
-      case "+":
-        tokens.add(new Token(Type.OPERATOR, "+"));
-        break;
-      case "*":
-        tokens.add(new Token(Type.OPERATOR, "*"));
-        break;
-      case "/":
-        tokens.add(new Token(Type.OPERATOR, "/"));
-        break;
-      case "%":
-        tokens.add(new Token(Type.OPERATOR, "%"));
-        break;
-      case "^":
-        tokens.add(new Token(Type.OPERATOR, "^"));
-        break;
-      case "=":
-        tokens.add(new Token(Type.OPERATOR, "="));
-        break;
-      case ">":
-        tokens.add(new Token(Type.OPERATOR, ">"));
-        break;
-      case "<":
-        tokens.add(new Token(Type.OPERATOR, "<"));
-        break;
-      case "(":
-        tokens.add(new Token(Type.SEPARATOR, "("));
-        break;
-      case ")":
-        tokens.add(new Token(Type.SEPARATOR, ")"));
-        break;
-      default:
-        tokens.add(new Token(Type.IDENTIFIER, in));
-        break;
+    if(symbols.containsKey(in)){
+      tokens.add(new Token(symbols.get(in), in));
+    }else{
+      tokens.add(new Token(Type.IDENTIFIER, in));
     }
   }
 
@@ -176,7 +116,7 @@ public class Lexer{
 
   public static void main(String[]args) throws IOException{
     //going to assume args has the file were going to need
-    String fileName = args[0];
+    String fileName = "ExampleProgram.psdc";//args[0];
     BufferedReader br = new BufferedReader(new FileReader(fileName));
     //System.out.println(br.readLine());
 
